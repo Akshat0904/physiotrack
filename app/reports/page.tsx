@@ -1,12 +1,12 @@
 import Sidebar from "@/components/Sidebar";
-import Dashboard from "@/components/Dashboard";
+import ReportsView from "@/components/ReportsView";
 
-export default function Home() {
+export default function ReportsPage() {
   return (
     <div style={{ display: "flex" }}>
       <Sidebar />
       <main style={{ marginLeft: 220, flex: 1 }}>
-        <Dashboard />
+        <ReportsView />
       </main>
     </div>
   );

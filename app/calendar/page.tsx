@@ -1,12 +1,12 @@
 import Sidebar from "@/components/Sidebar";
-import Dashboard from "@/components/Dashboard";
+import CalendarView from "@/components/CalendarView";
 
-export default function Home() {
+export default function CalendarPage() {
   return (
     <div style={{ display: "flex" }}>
       <Sidebar />
       <main style={{ marginLeft: 220, flex: 1 }}>
-        <Dashboard />
+        <CalendarView />
       </main>
     </div>
   );
