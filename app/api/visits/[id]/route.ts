@@ -27,9 +27,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         visitDate: body.visitDate ? new Date(body.visitDate) : undefined,
         duration: body.duration !== undefined ? Number(body.duration) : undefined,
         chargeAmount: body.chargeAmount !== undefined ? Number(body.chargeAmount) : undefined,
-        latitude: body.latitude !== undefined ? body.latitude : undefined,
-        longitude: body.longitude !== undefined ? body.longitude : undefined,
       },
+      include: { patient: true },
     });
     return NextResponse.json(visit);
   } catch (error) {

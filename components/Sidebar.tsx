@@ -6,10 +6,12 @@ import {
   LayoutDashboard,
   BarChart2,
   Stethoscope,
+  Users,
 } from "lucide-react";
 
 const navItems = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
+  { href: "/patients", icon: Users, label: "Patients" },
   { href: "/calendar", icon: CalendarDays, label: "Calendar" },
   { href: "/reports", icon: BarChart2, label: "Reports" },
 ];

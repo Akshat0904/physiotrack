@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
     const visits = await prisma.visit.findMany({
       where,
       orderBy: [{ visitDate: "asc" }, { orderIndex: "asc" }],
+      include: { patient: true },
     });
 
     return NextResponse.json(visits);
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const {
-      patientName, address, latitude, longitude,
+      patientId,
       visitDate, endDate, startTime, duration, chargeAmount,
       notes, status,
     } = body;
@@ -83,10 +84,7 @@ export async function POST(request: NextRequest) {
 
       const visit = await prisma.visit.create({
         data: {
-          patientName,
-          address,
-          latitude: latitude ?? null,
-          longitude: longitude ?? null,
+          patientId,
           visitDate: new Date(d),
           startTime,
           duration: Number(duration),
@@ -95,6 +93,7 @@ export async function POST(request: NextRequest) {
           status: status ?? "SCHEDULED",
           orderIndex: nextIndex,
         },
+        include: { patient: true },
       });
       createdVisits.push(visit);
     }

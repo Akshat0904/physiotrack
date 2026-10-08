@@ -34,10 +34,13 @@ import { formatCurrency, formatDate, minutesToHM, toDateKey } from "@/lib/utils"
 
 interface Visit {
   id: string;
-  patientName: string;
-  address: string;
-  latitude?: number | null;
-  longitude?: number | null;
+  patientId: string;
+  patient: {
+    name: string;
+    address: string;
+    latitude?: number | null;
+    longitude?: number | null;
+  };
   visitDate: string;
   startTime: string;
   duration: number;
@@ -104,9 +107,9 @@ export default function Dashboard() {
     setCalculating(true);
     try {
       const locations = visitList.map((v) => ({
-        lat: v.latitude,
-        lng: v.longitude,
-        address: v.address,
+        lat: v.patient?.latitude,
+        lng: v.patient?.longitude,
+        address: v.patient?.address,
       }));
 
       const res = await fetch("/api/travel-time", {

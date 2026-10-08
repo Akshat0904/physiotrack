@@ -6,8 +6,11 @@ import { formatTime, getEndTime, formatCurrency, minutesToHM } from "@/lib/utils
 
 interface Visit {
   id: string;
-  patientName: string;
-  address: string;
+  patientId: string;
+  patient: {
+    name: string;
+    address: string;
+  };
   visitDate: string;
   startTime: string;
   duration: number;
@@ -143,7 +146,7 @@ export default function VisitCard({
                     fontFamily: "'Plus Jakarta Sans', sans-serif",
                   }}
                 >
-                  {visit.patientName}
+                  {visit.patient?.name || "Unknown Patient"}
                 </span>
                 <span className={badgeClass}>
                   {visit.status === "COMPLETED" && <Check size={10} />}
@@ -164,7 +167,7 @@ export default function VisitCard({
                 }}
               >
                 <MapPin size={12} />
-                <span>{visit.address}</span>
+                <span>{visit.patient?.address || "No address"}</span>
               </div>
 
               {/* Time & duration & charge */}

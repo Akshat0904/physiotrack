@@ -11,13 +11,16 @@ type Range = "week" | "month" | "custom";
 
 interface Visit {
   id: string;
-  patientName: string;
+  patientId: string;
+  patient: {
+    name: string;
+    address: string;
+  };
   visitDate: string;
   startTime: string;
   chargeAmount: number;
   duration: number;
   status: string;
-  address: string;
 }
 
 interface DayStat {
@@ -243,8 +246,8 @@ export default function ReportsView() {
                   onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
                 >
                   <div>
-                    <div style={{ fontWeight: 600 }}>{v.patientName}</div>
-                    <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>{v.address}</div>
+                    <div style={{ fontWeight: 600 }}>{v.patient?.name || "Unknown Patient"}</div>
+                    <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>{v.patient?.address || "No address"}</div>
                   </div>
                   <div style={{ color: "var(--text-secondary)" }}>
                     {formatDateShort(new Date(v.visitDate))}

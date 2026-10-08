@@ -5,10 +5,8 @@ import { format } from "date-fns";
 
 interface Visit {
   id?: string;
-  patientName: string;
-  address: string;
-  latitude?: number | null;
-  longitude?: number | null;
+  patientId: string;
+  patient?: any;
   visitDate: string;
   startTime: string;
   duration: number;
@@ -48,8 +46,7 @@ export default function VisitModal({
   const today = defaultDate ?? format(new Date(), "yyyy-MM-dd");
 
   const blank: Visit = {
-    patientName: "",
-    address: "",
+    patientId: "",
     visitDate: today,
     startTime: "09:00",
     duration: 60,
@@ -63,6 +60,13 @@ export default function VisitModal({
   const [customDuration, setCustomDuration] = useState(false);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [patients, setPatients] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/patients")
+      .then(res => res.json())
+      .then(data => Array.isArray(data) && setPatients(data));
+  }, []);
 
   useEffect(() => {
     if (open) {
@@ -79,8 +83,7 @@ export default function VisitModal({
 
   function validate() {
     const errs: Record<string, string> = {};
-    if (!form.patientName.trim()) errs.patientName = "Patient name is required";
-    if (!form.address.trim()) errs.address = "Address is required";
+    if (!form.patientId) errs.patientId = "Patient is required";
     if (!form.visitDate) errs.visitDate = "Date is required";
     if (!form.startTime) errs.startTime = "Start time is required";
     if (!form.duration || form.duration <= 0) errs.duration = "Duration must be > 0";
@@ -121,36 +124,25 @@ export default function VisitModal({
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-          {/* Patient Name */}
+          {/* Patient */}
           <div className="form-group">
             <label className="form-label">
               <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <User size={13} /> Patient Name
+                <User size={13} /> Select Patient
               </span>
             </label>
-            <input
+            <select
               className="form-input"
-              placeholder="e.g. Priya Sharma"
-              value={form.patientName}
-              onChange={(e) => set("patientName", e.target.value)}
-            />
-            {errors.patientName && <span style={{ fontSize: 12, color: "#f87171" }}>{errors.patientName}</span>}
-          </div>
-
-          {/* Address */}
-          <div className="form-group">
-            <label className="form-label">
-              <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <MapPin size={13} /> Address
-              </span>
-            </label>
-            <input
-              className="form-input"
-              placeholder="e.g. 45, MG Road, Pune, Maharashtra"
-              value={form.address}
-              onChange={(e) => set("address", e.target.value)}
-            />
-            {errors.address && <span style={{ fontSize: 12, color: "#f87171" }}>{errors.address}</span>}
+              value={form.patientId}
+              onChange={(e) => set("patientId", e.target.value)}
+              style={{ colorScheme: "dark" }}
+            >
+              <option value="">-- Choose a Patient --</option>
+              {patients.map(p => (
+                <option key={p.id} value={p.id}>{p.name} ({p.address})</option>
+              ))}
+            </select>
+            {errors.patientId && <span style={{ fontSize: 12, color: "#f87171" }}>{errors.patientId}</span>}
           </div>
 
           {/* Date & Time */}
