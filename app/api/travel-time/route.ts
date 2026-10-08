@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 // POST /api/travel-time
 // Body: { locations: [{lat, lng, address}] }
 // Returns: travel times between consecutive locations

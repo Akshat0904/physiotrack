@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 // POST /api/visits/reorder
 // Body: { ids: string[], date: string }
 export async function POST(request: NextRequest) {

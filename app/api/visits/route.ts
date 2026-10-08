@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
 
+export const dynamic = "force-dynamic";
+
 // GET /api/visits?date=2024-01-15
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
