@@ -74,7 +74,12 @@ export default function ReportsView() {
     try {
       const res = await fetch(`/api/visits?startDate=${start}&endDate=${end}`);
       const data = await res.json();
-      setVisits(data);
+      if (Array.isArray(data)) {
+        setVisits(data);
+      } else {
+        console.error("API returned non-array:", data);
+        setVisits([]);
+      }
     } catch (e) {
       console.error(e);
     } finally {

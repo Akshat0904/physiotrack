@@ -72,7 +72,12 @@ export default function Dashboard() {
     try {
       const res = await fetch(`/api/visits?date=${dateKey}`);
       const data = await res.json();
-      setVisits(data);
+      if (Array.isArray(data)) {
+        setVisits(data);
+      } else {
+        console.error("API returned non-array:", data);
+        setVisits([]);
+      }
     } catch (e) {
       console.error(e);
     } finally {

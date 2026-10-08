@@ -28,6 +28,10 @@ export default function CalendarView() {
     try {
       const res = await fetch(`/api/visits?startDate=${start}&endDate=${end}`);
       const visits = await res.json();
+      if (!Array.isArray(visits)) {
+        console.error("API returned non-array:", visits);
+        return;
+      }
       const map: Record<string, DaySummary> = {};
       for (const v of visits) {
         const d = toDateKey(new Date(v.visitDate));
