@@ -15,8 +15,8 @@ interface Visit {
   chargeAmount: number;
   notes?: string | null;
   status?: string;
-  travelTimeFromPrev?: number | null;
   travelTimeMode?: string | null;
+  endDate?: string;
 }
 
 interface VisitModalProps {
@@ -55,6 +55,7 @@ export default function VisitModal({
     chargeAmount: 500,
     notes: "",
     status: "SCHEDULED",
+    endDate: "",
   };
 
   const [form, setForm] = useState<Visit>(initial ?? blank);
@@ -168,6 +169,24 @@ export default function VisitModal({
               />
               {errors.visitDate && <span style={{ fontSize: 12, color: "#f87171" }}>{errors.visitDate}</span>}
             </div>
+
+            {!initial?.id && (
+              <div className="form-group">
+                <label className="form-label">
+                  <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <Calendar size={13} /> End Date (Optional recurring)
+                  </span>
+                </label>
+                <input
+                  type="date"
+                  className="form-input"
+                  value={form.endDate || ""}
+                  onChange={(e) => set("endDate", e.target.value)}
+                  style={{ colorScheme: "dark" }}
+                />
+              </div>
+            )}
+
             <div className="form-group">
               <label className="form-label">
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}>

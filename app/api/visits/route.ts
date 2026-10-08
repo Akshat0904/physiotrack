@@ -46,41 +46,60 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       patientName, address, latitude, longitude,
-      visitDate, startTime, duration, chargeAmount,
+      visitDate, endDate, startTime, duration, chargeAmount,
       notes, status,
     } = body;
 
-    // Get max orderIndex for this day
-    const dayStart = new Date(visitDate);
-    dayStart.setHours(0, 0, 0, 0);
-    const dayEnd = new Date(visitDate);
-    dayEnd.setHours(23, 59, 59, 999);
+    // Generate dates
+    let dates = [new Date(visitDate)];
+    if (endDate) {
+      const end = new Date(endDate);
+      if (end > dates[0]) {
+        // Just generate each day by adding 1 day at a time to avoid date-fns eachDayOfInterval import overhead here
+        let curr = new Date(visitDate);
+        dates = [];
+        while (curr <= end) {
+          dates.push(new Date(curr));
+          curr.setDate(curr.getDate() + 1);
+        }
+      }
+    }
 
-    const existing = await prisma.visit.findMany({
-      where: { visitDate: { gte: dayStart, lte: dayEnd } },
-      orderBy: { orderIndex: "desc" },
-      take: 1,
-    });
+    // Create a visit for each date
+    const createdVisits = [];
+    for (const d of dates) {
+      const dayStart = new Date(d);
+      dayStart.setHours(0, 0, 0, 0);
+      const dayEnd = new Date(d);
+      dayEnd.setHours(23, 59, 59, 999);
 
-    const nextIndex = existing.length > 0 ? existing[0].orderIndex + 1 : 0;
+      const existing = await prisma.visit.findMany({
+        where: { visitDate: { gte: dayStart, lte: dayEnd } },
+        orderBy: { orderIndex: "desc" },
+        take: 1,
+      });
 
-    const visit = await prisma.visit.create({
-      data: {
-        patientName,
-        address,
-        latitude: latitude ?? null,
-        longitude: longitude ?? null,
-        visitDate: new Date(visitDate),
-        startTime,
-        duration: Number(duration),
-        chargeAmount: Number(chargeAmount),
-        notes: notes ?? null,
-        status: status ?? "SCHEDULED",
-        orderIndex: nextIndex,
-      },
-    });
+      const nextIndex = existing.length > 0 ? existing[0].orderIndex + 1 : 0;
 
-    return NextResponse.json(visit, { status: 201 });
+      const visit = await prisma.visit.create({
+        data: {
+          patientName,
+          address,
+          latitude: latitude ?? null,
+          longitude: longitude ?? null,
+          visitDate: new Date(d),
+          startTime,
+          duration: Number(duration),
+          chargeAmount: Number(chargeAmount),
+          notes: notes ?? null,
+          status: status ?? "SCHEDULED",
+          orderIndex: nextIndex,
+        },
+      });
+      createdVisits.push(visit);
+    }
+
+    return NextResponse.json(createdVisits[0], { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Failed to create visit" }, { status: 500 });
