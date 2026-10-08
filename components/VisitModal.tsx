@@ -15,6 +15,7 @@ interface Visit {
   chargeAmount: number;
   notes?: string | null;
   status?: string;
+  travelTimeFromPrev?: number | null;
   travelTimeMode?: string | null;
   endDate?: string;
 }
