@@ -35,8 +35,8 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(visits);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Failed to fetch visits" }, { status: 500 });
+    console.error("API GET Error:", error);
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }
 
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(createdVisits[0], { status: 201 });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Failed to create visit" }, { status: 500 });
+    console.error("API POST Error:", error);
+    return NextResponse.json({ error: String(error) }, { status: 500 });
   }
 }
