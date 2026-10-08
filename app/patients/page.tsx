@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { User, MapPin, Phone, FileText, Edit2, Trash2, Plus, X } from "lucide-react";
 
+import Sidebar from "@/components/Sidebar";
+
 interface Patient {
   id: string;
   name: string;
@@ -93,8 +95,11 @@ export default function PatientsView() {
   }
 
   return (
-    <div style={{ padding: "32px 32px 80px", minHeight: "100vh" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
+    <div className="layout-container">
+      <Sidebar />
+      <main className="main-content">
+        <div style={{ padding: "32px 16px 80px", minHeight: "100vh" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
         <div>
           <h1 style={{ fontSize: 28, fontWeight: 800, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Patients</h1>
           <p style={{ color: "var(--text-muted)", marginTop: 4 }}>Manage patient details and records</p>
@@ -172,6 +177,8 @@ export default function PatientsView() {
           </div>
         </div>
       )}
+        </div>
+      </main>
     </div>
   );
 }

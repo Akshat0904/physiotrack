@@ -82,7 +82,9 @@ export default function CalendarView() {
         </button>
       </div>
 
-      {/* Day headers */}
+      <div style={{ overflowX: "auto", paddingBottom: 16 }}>
+        <div style={{ minWidth: 600 }}>
+          {/* Day headers */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 8, marginBottom: 8 }}>
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
           <div key={d} style={{ textAlign: "center", fontSize: 12, fontWeight: 600, color: "var(--text-muted)", padding: "4px 0" }}>
@@ -137,6 +139,8 @@ export default function CalendarView() {
             </div>
           );
         })}
+      </div>
+      </div>
       </div>
     </div>
   );

@@ -3,9 +3,9 @@ import CalendarView from "@/components/CalendarView";
 
 export default function CalendarPage() {
   return (
-    <div style={{ display: "flex" }}>
+    <div className="layout-container">
       <Sidebar />
-      <main style={{ marginLeft: 220, flex: 1 }}>
+      <main className="main-content">
         <CalendarView />
       </main>
     </div>

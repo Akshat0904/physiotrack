@@ -3,9 +3,9 @@ import Dashboard from "@/components/Dashboard";
 
 export default function Home() {
   return (
-    <div style={{ display: "flex" }}>
+    <div className="layout-container">
       <Sidebar />
-      <main style={{ marginLeft: 220, flex: 1 }}>
+      <main className="main-content">
         <Dashboard />
       </main>
     </div>

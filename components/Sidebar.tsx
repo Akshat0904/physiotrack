@@ -21,6 +21,7 @@ export default function Sidebar() {
 
   return (
     <aside
+      className="sidebar-container"
       style={{
         width: 220,
         minHeight: "100vh",
@@ -39,6 +40,7 @@ export default function Sidebar() {
     >
       {/* Logo */}
       <div
+        className="sidebar-logo"
         style={{
           display: "flex",
           alignItems: "center",
@@ -80,7 +82,7 @@ export default function Sidebar() {
       </div>
 
       {/* Nav */}
-      <nav style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      <nav className="sidebar-nav" style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         {navItems.map(({ href, icon: Icon, label }) => {
           const isActive = pathname === href;
           return (

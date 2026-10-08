@@ -220,7 +220,7 @@ export default function ReportsView() {
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {/* Header */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 100px 100px 100px", gap: 16, padding: "8px 12px", fontSize: 12, fontWeight: 600, color: "var(--text-muted)", borderBottom: "1px solid var(--border)", marginBottom: 4 }}>
+            <div className="visit-list-grid" style={{ padding: "8px 12px", fontSize: 12, fontWeight: 600, color: "var(--text-muted)", borderBottom: "1px solid var(--border)", marginBottom: 4 }}>
               <span>Patient</span>
               <span>Date</span>
               <span>Duration</span>
@@ -232,10 +232,8 @@ export default function ReportsView() {
               return (
                 <div
                   key={v.id}
+                  className="visit-list-grid"
                   style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 1fr 100px 100px 100px",
-                    gap: 16,
                     padding: "12px",
                     borderRadius: 10,
                     fontSize: 13,
@@ -265,10 +263,7 @@ export default function ReportsView() {
             })}
 
             {/* Total row */}
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr 100px 100px 100px",
-              gap: 16,
+            <div className="visit-list-grid" style={{
               padding: "14px 12px",
               borderTop: "1px solid var(--border)",
               marginTop: 4,
