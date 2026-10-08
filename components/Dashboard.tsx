@@ -58,6 +58,12 @@ export default function Dashboard() {
   const [editingVisit, setEditingVisit] = useState<Visit | null>(null);
   const [calculating, setCalculating] = useState(false);
 
+  // DnD setup
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
   // Hydrate date on client only to avoid Next.js prerender error
   useEffect(() => {
     setSelectedDate(new Date());
@@ -142,11 +148,7 @@ export default function Dashboard() {
     }
   }
 
-  // DnD setup
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
+  // DnD setup (moved up to avoid Rules of Hooks violation)
 
   async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
