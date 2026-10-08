@@ -48,7 +48,7 @@ export default function CalendarView() {
   useEffect(() => { fetchMonth(); }, [fetchMonth]);
 
   // Don't render until hydrated
-  if (!currentMonth) return null;
+  if (!currentMonth) return <div style={{ minHeight: "100vh" }} />;
 
   const days = eachDayOfInterval({
     start: startOfMonth(currentMonth),

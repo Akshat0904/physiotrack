@@ -90,7 +90,7 @@ export default function Dashboard() {
   }, [fetchVisits]);
 
   // Show nothing until hydrated
-  if (!selectedDate) return null;
+  if (!selectedDate) return <div style={{ minHeight: "100vh" }} />;
 
   // Calculate travel times via ORS
   async function calculateTravelTimes(visitList: Visit[]) {

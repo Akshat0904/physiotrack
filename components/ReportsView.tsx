@@ -89,7 +89,7 @@ export default function ReportsView() {
 
   useEffect(() => { fetchReports(); }, [fetchReports]);
 
-  if (!hydrated) return null;
+  if (!hydrated) return <div style={{ minHeight: "100vh" }} />;
 
   // Group by day for chart
   const dayMap: Record<string, DayStat> = {};
