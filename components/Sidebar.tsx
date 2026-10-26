@@ -7,12 +7,14 @@ import {
   BarChart2,
   Stethoscope,
   Users,
+  Gauge,
 } from "lucide-react";
 
 const navItems = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/patients", icon: Users, label: "Patients" },
   { href: "/calendar", icon: CalendarDays, label: "Calendar" },
+  { href: "/stats", icon: Gauge, label: "Stats" },
   { href: "/reports", icon: BarChart2, label: "Reports" },
 ];
 
@@ -97,32 +99,6 @@ export default function Sidebar() {
           );
         })}
       </nav>
-
-      {/* Bottom tip */}
-      <div style={{ marginTop: "auto" }}>
-        <div
-          style={{
-            background: "rgba(124,58,237,0.08)",
-            border: "1px solid rgba(124,58,237,0.15)",
-            borderRadius: 12,
-            padding: "12px 14px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              color: "var(--accent-light)",
-              marginBottom: 4,
-            }}
-          >
-            💡 Tip
-          </div>
-          <div style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5 }}>
-            Drag & drop visits to reorder by location. Travel time updates automatically.
-          </div>
-        </div>
-      </div>
     </aside>
   );
 }

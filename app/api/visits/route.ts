@@ -51,6 +51,13 @@ export async function POST(request: NextRequest) {
       notes, status,
     } = body;
 
+    if (!patientId || !visitDate || !startTime || !duration || chargeAmount === undefined || chargeAmount === null) {
+      return NextResponse.json(
+        { error: "patientId, visitDate, startTime, duration and chargeAmount are required" },
+        { status: 400 }
+      );
+    }
+
     // Generate dates
     let dates = [new Date(visitDate)];
     if (endDate) {
@@ -98,7 +105,14 @@ export async function POST(request: NextRequest) {
       createdVisits.push(visit);
     }
 
-    return NextResponse.json(createdVisits[0], { status: 201 });
+    // Return the first created visit at the top level for backward
+    // compatibility with callers that create a single visit, plus the full
+    // list under `visits` so recurring (multi-day) creates aren't silently
+    // dropped by the caller.
+    return NextResponse.json(
+      { ...createdVisits[0], visits: createdVisits },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("API POST Error:", error);
     return NextResponse.json({ error: String(error) }, { status: 500 });

@@ -146,7 +146,7 @@ export default function VisitModal({
           </div>
 
           {/* Date & Time */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div className="form-row-2">
             <div className="form-group">
               <label className="form-label">
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -257,7 +257,7 @@ export default function VisitModal({
           </div>
 
           {/* Charge & Status */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div className="form-row-2">
             <div className="form-group">
               <label className="form-label">
                 <span style={{ display: "flex", alignItems: "center", gap: 6 }}>

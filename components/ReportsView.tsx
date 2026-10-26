@@ -131,7 +131,7 @@ export default function ReportsView() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", padding: "32px" }}>
+    <div className="page-shell">
       <h1 style={{ fontSize: 26, fontWeight: 800, fontFamily: "'Plus Jakarta Sans', sans-serif", marginBottom: 8 }}>
         Reports & Earnings
       </h1>

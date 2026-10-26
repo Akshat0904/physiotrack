@@ -41,6 +41,7 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* Scrollbar */
@@ -193,6 +194,35 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+/* Two-column form rows (date/time, charge/status, etc.) — collapse on mobile */
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* Page content wrapper used by Dashboard/Calendar/Reports/Patients */
+.page-shell {
+  min-height: 100vh;
+  padding: 32px 32px 80px;
+}
+
+/* Header row with title + action controls */
+.page-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.date-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* Status badges */
@@ -418,5 +448,39 @@ body {
   .visit-list-grid > :nth-child(3),
   .visit-list-grid > :nth-child(4) {
     display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-shell {
+    padding: 20px 16px 90px;
+  }
+  .modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .modal-content {
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+    max-width: 100%;
+    max-height: 85vh;
+  }
+  .date-nav .form-input {
+    width: 130px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-row-2 {
+    grid-template-columns: 1fr;
+  }
+  .page-header-row {
+    align-items: flex-start;
+  }
+  .date-nav {
+    width: 100%;
+  }
+  .date-nav .form-input {
+    width: 120px !important;
   }
 }
