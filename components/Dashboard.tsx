@@ -20,17 +20,13 @@ import {
   ChevronRight,
   Plus,
   RefreshCw,
-  IndianRupee,
-  MapPin,
-  Clock,
   CheckCircle,
-  Car,
   Calendar,
 } from "lucide-react";
-import { format, addDays, subDays, isToday } from "date-fns";
+import { addDays, subDays, isToday } from "date-fns";
 import VisitCard from "@/components/VisitCard";
 import VisitModal from "@/components/VisitModal";
-import { formatCurrency, formatDate, minutesToHM, toDateKey } from "@/lib/utils";
+import { formatDate, toDateKey } from "@/lib/utils";
 
 interface Visit {
   id: string;
@@ -220,27 +216,13 @@ export default function Dashboard() {
     await fetchVisits();
   }
 
-  // Stats
-  const totalEarnings = visits
-    .filter((v) => v.status !== "CANCELLED")
-    .reduce((sum, v) => sum + v.chargeAmount, 0);
-  const completedCount = visits.filter((v) => v.status === "COMPLETED").length;
-  const totalTravelMins = visits
-    .slice(1)
-    .reduce((sum, v) => sum + (v.travelTimeFromPrev ?? 0), 0);
-  const totalDurationMins = visits.reduce((sum, v) => sum + v.duration, 0);
-
   return (
-    <div style={{ minHeight: "100vh", padding: "32px 32px 80px" }}>
+    <div className="page-shell">
       {/* Header */}
       <div
+        className="page-header-row"
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
           marginBottom: 32,
-          flexWrap: "wrap",
-          gap: 16,
         }}
       >
         <div>
@@ -260,7 +242,7 @@ export default function Dashboard() {
         </div>
 
         {/* Date nav */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div className="date-nav">
           <button
             className="btn-icon"
             onClick={() => setSelectedDate((d) => subDays(d ?? new Date(), 1))}
@@ -310,132 +292,6 @@ export default function Dashboard() {
             <Plus size={16} />
             Add Visit
           </button>
-        </div>
-      </div>
-
-      {/* Stats Row */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-          gap: 16,
-          marginBottom: 32,
-        }}
-      >
-        <div className="stat-card">
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: 8,
-                background: "rgba(52,211,153,0.15)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <IndianRupee size={16} color="#34d399" />
-            </div>
-            <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
-              Today&apos;s Earnings
-            </span>
-          </div>
-          <div
-            style={{ fontSize: 24, fontWeight: 800, color: "#34d399", marginTop: 4 }}
-          >
-            {formatCurrency(totalEarnings)}
-          </div>
-          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-            {visits.filter((v) => v.status !== "CANCELLED").length} billable visits
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: 8,
-                background: "rgba(124,58,237,0.15)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <MapPin size={16} color="#a78bfa" />
-            </div>
-            <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
-              Total Visits
-            </span>
-          </div>
-          <div
-            style={{ fontSize: 24, fontWeight: 800, color: "#a78bfa", marginTop: 4 }}
-          >
-            {visits.length}
-          </div>
-          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-            {completedCount} completed
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: 8,
-                background: "rgba(14,165,233,0.15)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Car size={16} color="#38bdf8" />
-            </div>
-            <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
-              Travel Time
-            </span>
-          </div>
-          <div
-            style={{ fontSize: 24, fontWeight: 800, color: "#38bdf8", marginTop: 4 }}
-          >
-            {minutesToHM(totalTravelMins)}
-          </div>
-          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-            between visits
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: 8,
-                background: "rgba(245,158,11,0.15)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Clock size={16} color="#fbbf24" />
-            </div>
-            <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
-              Visit Duration
-            </span>
-          </div>
-          <div
-            style={{ fontSize: 24, fontWeight: 800, color: "#fbbf24", marginTop: 4 }}
-          >
-            {minutesToHM(totalDurationMins)}
-          </div>
-          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-            total treatment time
-          </div>
         </div>
       </div>
 

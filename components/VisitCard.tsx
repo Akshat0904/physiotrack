@@ -71,7 +71,7 @@ export default function VisitCard({
             display: "flex",
             alignItems: "center",
             gap: 8,
-            padding: "6px 0 6px 48px",
+            padding: "3px 0 3px 36px",
           }}
         >
           <div className="travel-pill">
@@ -110,17 +110,17 @@ export default function VisitCard({
           style={{
             display: "flex",
             alignItems: "center",
-            padding: "16px 10px",
+            padding: "10px 6px",
             cursor: "grab",
             color: "var(--text-muted)",
             flexShrink: 0,
           }}
         >
-          <GripVertical size={16} />
+          <GripVertical size={14} />
         </div>
 
         {/* Content */}
-        <div style={{ flex: 1, padding: "16px 16px 16px 4px" }}>
+        <div style={{ flex: 1, padding: "10px 10px 10px 2px" }}>
           <div
             style={{
               display: "flex",
@@ -135,13 +135,13 @@ export default function VisitCard({
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 8,
-                  marginBottom: 6,
+                  gap: 6,
+                  marginBottom: 3,
                 }}
               >
                 <span
                   style={{
-                    fontSize: 15,
+                    fontSize: 13.5,
                     fontWeight: 700,
                     fontFamily: "'Plus Jakarta Sans', sans-serif",
                   }}
@@ -161,34 +161,34 @@ export default function VisitCard({
                   display: "flex",
                   alignItems: "center",
                   gap: 5,
-                  fontSize: 13,
+                  fontSize: 12,
                   color: "var(--text-secondary)",
-                  marginBottom: 10,
+                  marginBottom: 5,
                 }}
               >
-                <MapPin size={12} />
+                <MapPin size={11} />
                 <span>{visit.patient?.address || "No address"}</span>
               </div>
 
               {/* Time & duration & charge */}
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: 5,
-                    fontSize: 13,
+                    gap: 4,
+                    fontSize: 12,
                     color: "var(--text-secondary)",
                   }}
                 >
-                  <Clock size={12} />
+                  <Clock size={11} />
                   <span>
                     {formatTime(visit.startTime)} – {formatTime(endTime)}
                   </span>
                 </div>
                 <div
                   style={{
-                    fontSize: 13,
+                    fontSize: 12,
                     color: "var(--text-muted)",
                   }}
                 >
@@ -196,7 +196,7 @@ export default function VisitCard({
                 </div>
                 <div
                   style={{
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: 700,
                     color: "#34d399",
                     marginLeft: "auto",
@@ -210,11 +210,11 @@ export default function VisitCard({
               {visit.notes && (
                 <div
                   style={{
-                    marginTop: 8,
-                    fontSize: 12,
+                    marginTop: 5,
+                    fontSize: 11.5,
                     color: "var(--text-muted)",
                     fontStyle: "italic",
-                    lineHeight: 1.5,
+                    lineHeight: 1.4,
                   }}
                 >
                   {visit.notes}
@@ -223,31 +223,32 @@ export default function VisitCard({
             </div>
 
             {/* Actions */}
-            <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+            <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
               {visit.status !== "COMPLETED" && (
                 <button
                   className="btn-icon"
                   title="Mark as completed"
                   onClick={() => onStatusChange(visit.id, "COMPLETED")}
-                  style={{ color: "#34d399", borderColor: "rgba(52,211,153,0.2)" }}
+                  style={{ width: 28, height: 28, color: "#34d399", borderColor: "rgba(52,211,153,0.2)" }}
                 >
-                  <Check size={14} />
+                  <Check size={13} />
                 </button>
               )}
               <button
                 className="btn-icon"
                 title="Edit"
                 onClick={() => onEdit(visit)}
+                style={{ width: 28, height: 28 }}
               >
-                <Edit2 size={14} />
+                <Edit2 size={13} />
               </button>
               <button
                 className="btn-icon btn-danger"
                 title="Delete"
                 onClick={() => onDelete(visit.id)}
-                style={{ width: 34, height: 34 }}
+                style={{ width: 28, height: 28 }}
               >
-                <Trash2 size={14} />
+                <Trash2 size={13} />
               </button>
             </div>
           </div>

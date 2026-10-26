@@ -21,15 +21,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ travelTimes: mock, source: "no_api_key" });
     }
 
-    // Build coordinate pairs [lng, lat] for ORS
-    const coords = locations
-      .filter((l: { lat?: number; lng?: number }) => l.lat && l.lng)
-      .map((l: { lat: number; lng: number }) => [l.lng, l.lat]);
+    // Keep every location's original index, but only locations with real
+    // coordinates can be sent to ORS. This preserves alignment between
+    // `travelTimes[i]` and the (i+1)-th visit even when some patients are
+    // missing lat/lng, instead of silently shifting every pair after a gap.
+    const hasCoords = (l: { lat?: number | null; lng?: number | null }) =>
+      typeof l.lat === "number" && typeof l.lng === "number";
 
-    if (coords.length < 2) {
+    const validIndices = locations
+      .map((l: { lat?: number | null; lng?: number | null }, i: number) => (hasCoords(l) ? i : -1))
+      .filter((i: number) => i !== -1);
+
+    if (validIndices.length < 2) {
       const empty = locations.slice(1).map(() => ({ duration: null, distance: null }));
       return NextResponse.json({ travelTimes: empty, source: "no_coords" });
     }
+
+    const coords = validIndices.map((i: number) => [locations[i].lng, locations[i].lat]);
 
     // Call ORS Matrix API
     const orsRes = await fetch(
@@ -56,14 +64,24 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await orsRes.json();
-    const durations = data.durations; // matrix
+    const durations = data.durations; // matrix, indexed over `coords`/`validIndices`
     const distances = data.distances;
 
-    // Extract consecutive pairs (0→1, 1→2, 2→3 ...)
-    const travelTimes = coords.slice(1).map((_: unknown, i: number) => ({
-      duration: Math.round((durations[i][i + 1] ?? 0) / 60), // seconds → minutes
-      distance: Math.round(((distances[i][i + 1] ?? 0) / 1000) * 10) / 10, // m → km
-    }));
+    // Map ORS's matrix (indexed over the filtered `validIndices`) back onto
+    // every consecutive pair of the ORIGINAL `locations` array, so the
+    // result always has length `locations.length - 1` and `travelTimes[i]`
+    // really is the leg from visit i to visit i+1.
+    const travelTimes = locations.slice(1).map((_: unknown, i: number) => {
+      const fromPos = validIndices.indexOf(i);
+      const toPos = validIndices.indexOf(i + 1);
+      if (fromPos === -1 || toPos === -1) {
+        return { duration: null, distance: null };
+      }
+      return {
+        duration: Math.round((durations[fromPos][toPos] ?? 0) / 60), // seconds → minutes
+        distance: Math.round(((distances[fromPos][toPos] ?? 0) / 1000) * 10) / 10, // m → km
+      };
+    });
 
     return NextResponse.json({ travelTimes, source: "ors" });
   } catch (error) {

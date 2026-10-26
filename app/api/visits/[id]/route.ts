@@ -20,14 +20,35 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   try {
     const { id } = await params;
     const body = await request.json();
+
+    // Callers (e.g. the edit modal) round-trip the full visit they fetched,
+    // which includes the nested `patient` relation object and other
+    // non-scalar/derived fields. Passing those straight through to
+    // prisma.visit.update() throws, since `patient` isn't a valid relation
+    // write shape — so only whitelist the fields this endpoint should update.
+    const {
+      patientId, visitDate, endDate, startTime, duration, chargeAmount,
+      notes, status, orderIndex,
+      travelTimeFromPrev, travelTimeMode, travelDistanceFromPrev,
+    } = body;
+    void endDate; // not a Visit field; only used by POST to create a date range
+
+    const data: Record<string, unknown> = {};
+    if (patientId !== undefined) data.patientId = patientId;
+    if (visitDate !== undefined) data.visitDate = new Date(visitDate);
+    if (startTime !== undefined) data.startTime = startTime;
+    if (duration !== undefined) data.duration = Number(duration);
+    if (chargeAmount !== undefined) data.chargeAmount = Number(chargeAmount);
+    if (notes !== undefined) data.notes = notes;
+    if (status !== undefined) data.status = status;
+    if (orderIndex !== undefined) data.orderIndex = orderIndex;
+    if (travelTimeFromPrev !== undefined) data.travelTimeFromPrev = travelTimeFromPrev;
+    if (travelTimeMode !== undefined) data.travelTimeMode = travelTimeMode;
+    if (travelDistanceFromPrev !== undefined) data.travelDistanceFromPrev = travelDistanceFromPrev;
+
     const visit = await prisma.visit.update({
       where: { id },
-      data: {
-        ...body,
-        visitDate: body.visitDate ? new Date(body.visitDate) : undefined,
-        duration: body.duration !== undefined ? Number(body.duration) : undefined,
-        chargeAmount: body.chargeAmount !== undefined ? Number(body.chargeAmount) : undefined,
-      },
+      data,
       include: { patient: true },
     });
     return NextResponse.json(visit);
