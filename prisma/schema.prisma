@@ -3,8 +3,17 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // Pooled connection (e.g. Supabase's pgbouncer pooler on :6543) used at
+  // runtime by the app. Must include `pgbouncer=true` — without it, pooled
+  // transaction-mode connections get reused across requests/lambdas and
+  // Prisma's named prepared statements collide ("prepared statement ...
+  // already exists", Postgres error 42P05).
+  url       = env("DATABASE_URL")
+  // Direct (unpooled) connection used only for `prisma migrate` / `db push`,
+  // since DDL and advisory locks don't work reliably through a transaction
+  // pooler.
+  directUrl = env("DIRECT_URL")
 }
 
 model Patient {
